@@ -1,0 +1,4 @@
+# .gitignore 内容，复制进仓库 .gitignore
+__pycache__/
+*.pyc
+child_*.py
