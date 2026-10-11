@@ -1,3 +1,5 @@
+> 🌐 Language / 语言：
+> [English](README.md) | [简体中文](README_zh-CN.md)
 # Child-Quine
 Pure playful Python nested quine replication project.
 
