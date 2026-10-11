@@ -25,3 +25,11 @@ The entire nesting chain stops automatically once the tokens run out.
 ## Run
 ```bash
 python main.py
+```
+## ⚠️ Warning
+Do **NOT** set an excessively large `max_pass` value.
+It will generate massive script files and fill up your disk.
+
+## Statement
+This project is for programming fun only.
+It is not a strictly mathematical quine.
