@@ -1,14 +1,27 @@
 import sys
+import os
 
-max_pass = 3
+COUNTER_FILE = "counter.txt"
+
+def get_and_dec_pass():
+    # 读取计数器
+    with open(COUNTER_FILE, "r", encoding="utf-8") as f:
+        val = int(f.read().strip())
+    ret = val
+    new_val = val - 1
+    # 写回扣减之后的值
+    with open(COUNTER_FILE, "w", encoding="utf-8") as f:
+        f.write(str(new_val))
+    return ret
+
+max_pass_init = 3
 generation = 0
 
 if len(sys.argv) > 1 and sys.argv[1] == "query":
-    global max_pass, generation
     generation += 1
-    print(f"【链路】第{generation}代副本发起查询 | 剩余令牌：{max_pass}")
-    print(max_pass)
-    max_pass -= 1
+    rem = get_and_dec_pass()
+    print(f"【链路】第{generation}代副本发起查询 | 剩余令牌：{rem}")
+    print(rem)
     sys.exit()
 
 child_code = '''import os
@@ -33,8 +46,23 @@ else:
 '''
 
 print("===== 分布式套娃奎因系统启动 =====")
+# 初始化计数器文件
+with open(COUNTER_FILE, "w", encoding="utf-8") as f:
+    f.write(str(max_pass_init))
+
 with open("child_1.py","w",encoding="utf-8") as f:
     f.write(child_code)
 print("main生成初代 child_1.py，开始执行")
 os.system("python child_1.py")
-print("===== 套娃链路全部结束 =====")
+
+# 读取最终状态，判断是否归零
+with open(COUNTER_FILE, "r", encoding="utf-8") as f:
+    final_pass = int(f.read().strip())
+
+if final_pass <= 0:
+    print("===== 套娃链路全部结束 =====")
+else:
+    print(f"注意：结束时剩余令牌 = {final_pass}")
+
+# 清理状态文件
+os.remove(COUNTER_FILE)
